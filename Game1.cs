@@ -11,13 +11,14 @@ namespace imsleepy
         private GraphicsDeviceManager grap;
         private SpriteBatch sB;
         SpriteFont sprite;
-        Vector2 v=new Vector2(0,0);
+        Texture2D wioe, dowd ;
+        Vector2 cheskers=new Vector2(80,80);
+        Rectangle chessy = new Rectangle(0, 0, 80, 80);
         Random r = new Random();
         List<Color> colors = new List<Color> { Color.Red,Color.Green,Color.Blue,Color.Yellow};
-        int rum;
+        int rum;        
         public Game1()
-        {
-            
+        {            
             grap = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -28,7 +29,7 @@ namespace imsleepy
             // TODO: Add your initialization logic here
             grap.PreferredBackBufferWidth = 640;
             grap.PreferredBackBufferHeight = 640;
-            grap.ApplyChanges();            
+            grap.ApplyChanges();           
             base.Initialize();
         }
 
@@ -36,20 +37,16 @@ namespace imsleepy
         {
             sB = new SpriteBatch(GraphicsDevice);
             sprite = Content.Load<SpriteFont>("Arial");
+            wioe = Content.Load<Texture2D>("woodside");
+            dowd = Content.Load<Texture2D>("wooddown");
             // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
+                Exit();                            
             // TODO: Add your update logic here
-            v.X += 10;
-            if (v.X > grap.PreferredBackBufferWidth)
-            { v.X = 0; v.Y += 10; }
-            else if (v.Y > grap.PreferredBackBufferHeight)
-                v.Y = 0;
             base.Update(gameTime);
         }
 
@@ -59,7 +56,17 @@ namespace imsleepy
             rum = r.Next(colors.Count);
             // TODO: Add your drawing code here
             sB.Begin();
-            sB.DrawString(sprite, "so sleepy",v, colors[rum]);
+            while(chessy.Y+(int)cheskers.Y!= grap.PreferredBackBufferHeight)
+            { 
+                while (chessy.X + (int)cheskers.X != grap.PreferredBackBufferWidth)
+                {
+                    sB.Draw(dowd, chessy, Color.White);
+                    chessy.X += (int)cheskers.X;
+                    sB.Draw(wioe, chessy, Color.White);                    
+                }
+                chessy.Y +=(int) cheskers.Y;
+                chessy.X = 0;              
+            }
             sB.End();
             base.Draw(gameTime);
         }
